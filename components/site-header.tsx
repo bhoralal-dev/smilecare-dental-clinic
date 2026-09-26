@@ -1,0 +1,1 @@
+export function SiteHeader(){return <header className="shell header"><a href="#home" className="brand">? <span>SMILECARE<small>DENTAL CLINIC</small></span></a><nav><a href="#about">About</a><a href="#services">Services</a><a href="#contact">Contact</a></nav><a className="header-button" href="#appointment">Book a visit ?</a></header>}

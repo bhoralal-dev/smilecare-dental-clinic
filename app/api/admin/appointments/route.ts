@@ -1,0 +1,2 @@
+import {NextResponse} from "next/server"; import {prisma} from "@/lib/prisma"; import {verifyAdmin} from "@/lib/auth";
+export async function requireAdmin(req:Request){const token=req.headers.get("cookie")?.match(/smilecare_admin=([^;]+)/)?.[1];return verifyAdmin(token)} export async function GET(req:Request){if(!await requireAdmin(req))return NextResponse.json({error:"Unauthorized"},{status:401});const appointments=await prisma.appointment.findMany({include:{service:true},orderBy:{createdAt:"desc"}});return NextResponse.json({appointments})}

@@ -1,0 +1,61 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Service {
+  id           String        @id @default(cuid())
+  name         String        @unique
+  description  String?
+  active       Boolean       @default(true)
+  appointments Appointment[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Appointment {
+  id        String            @id @default(cuid())
+  fullName  String
+  phone     String
+  email     String
+  date      DateTime
+  time      String
+  message   String?
+  status    AppointmentStatus @default(PENDING)
+  serviceId String
+  service   Service           @relation(fields: [serviceId], references: [id])
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@index([date, status])
+  @@index([email])
+}
+
+model ClinicSettings {
+  id           String   @id @default("clinic")
+  name         String   @default("SmileCare Dental Clinic")
+  dentistName  String   @default("Manoj Kumar, BDS")
+  address      String   @default("Shahi Bazaar Road, Umerkot, Sindh, Pakistan")
+  phone        String   @default("+923353227674")
+  email        String   @default("mr.manojrajput7674@gmail.com")
+  openingHours String   @default("Monday–Thursday, 10:00 AM–5:00 PM")
+  updatedAt    DateTime @updatedAt
+}
